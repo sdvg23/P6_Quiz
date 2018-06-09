@@ -153,3 +153,54 @@ exports.check = (req, res, next) => {
         answer
     });
 };
+
+// GET /quizzes/randomplay
+exports.randomplay = (req, res, next) => {
+
+    //array con quizzes pendientes de resolver y puntuacion
+    req.session.randomPlay = req.session.randomPlay || [];
+    const answeredQuestions = req.session.randomPlay;
+    const score = req.session.score || 0;
+    
+    models.quiz.findAll()
+    .then(quizzes => {
+        //si quedan preguntas por salir
+        if(quizzes.length > answeredQuestions.length){
+            let random = 0;
+            do{
+                random = Math.floor(Math.random()*quizzes.length);
+            } while(answeredQuestions.includes(quizzes[random]))
+            req.session.randomPlay.push(quizzes[random]);
+            var quiz = quizzes[random];
+            res.render('quizzes/random_play', {quiz, score});
+        //si ya se han contestado a todas las preguntas
+        } else {
+            //vaciamos array de preguntas contestadas
+            req.session.randomPlay = [];
+            req.session.score = 0;
+            res.render('quizzes/random_nomore', {score});
+        }
+    })
+    .catch(error => next(error));
+};
+
+// GET /quizzes/randomcheck/:quizId
+exports.randomcheck = (req, res, next) => {
+
+    const answer = req.query.answer;
+    models.quiz.findById(req.quiz.id)
+    .then(quiz =>{
+        if(quiz.answer === answer){
+            req.session.score++;
+            req.session.result = true;
+        } else {
+            req.session.score = 0;
+            req.session.result = false;
+            req.session.randomPlay = [];
+        }
+        var score = req.session.score;
+        var result = req.session.result;
+        res.render('quizzes/random_result', {score, result, answer});
+
+    }).catch(error => next(error));
+};
