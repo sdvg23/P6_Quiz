@@ -12,6 +12,9 @@
             <li>
                 <%= tip.text %>
 
+                <!-- pongo para que salga el autor del tip, ver pag 11 tema 17(autores de los quizzes)-->
+                <small>Author of the tip: <%= tip.author ? tip.author.username : "Anonymous" %></small>
+
                 <% if (!accepted && (isAdmin || isQuizAuthor)) { %>
 
                     <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>/accept?_method=PUT">

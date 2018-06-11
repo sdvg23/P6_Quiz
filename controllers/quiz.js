@@ -9,7 +9,9 @@ exports.load = (req, res, next, quizId) => {
 
     models.quiz.findById(quizId, {
         include: [
-            models.tip,
+            //Carga de forma ansiosa(include) para que al cargar las tips, 
+            //se cargue tambien quien es el autor de las mismas
+            {model: models.tip, include: [{model: models.user, as: 'author'}]},
             {model: models.user, as: 'author'}
         ]
     })
