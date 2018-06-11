@@ -7,6 +7,9 @@
         <% var isAdmin = session.user && session.user.isAdmin; %>
         <% var isQuizAuthor = session.user && quizAuthorId && quizAuthorId === session.user.id; %>
 
+        <!-- nuevo practica 8 porque el autor de la tip es el que la puede cambiar junto con el admin-->
+        <% var isTipAuthor = session.user && tip.authorId === session.user.id; %>
+
         <% if (accepted || isAdmin || isQuizAuthor) { %>
 
             <li>
@@ -27,6 +30,15 @@
 
                     <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>?_method=DELETE">
                         <button>Delete</button>
+                    </a>
+
+                <% } %>
+
+                <!-- nuevo practica 8: solo si usuario logueado es admin o autor de la pista -->
+                <% if (isAdmin || isTipAuthor) { %>
+
+                    <a href="/quizzes/<%= quizId %>/tips/<%= tip.id %>/edit?_method=GET">
+                        <button>Edit</button>
                     </a>
 
                 <% } %>

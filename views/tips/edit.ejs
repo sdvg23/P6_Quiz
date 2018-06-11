@@ -1,0 +1,17 @@
+
+<!-- creado practica8 para editar tip. lo envio a ultima ruta(la post de los tips)-->
+
+<h1>
+    Edit tip:
+</h1>
+
+<form method="post" action="/quizzes/<%= quiz.id %>/tips/<%= tip.id %>?_method=PUT" >
+    <div class="wideRow">
+	<label for="pista"  class="itemNarrow">Tip:</label>
+	<input type="text" class="itemWide" id="pista" name="tip" value="<%= tip.text %>" placeholder="Tip" autocomplete="off"/>
+	</div>
+<br/>
+<a href="/goback"><button type="button">Cancel</button></a>
+
+<input type="submit" value="Save">
+</form>
